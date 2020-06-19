@@ -1,0 +1,42 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.web.mappers.MovieMapper">
+    <insert id="insertMovie"
+            parameterType="com.example.web.music.MovieDTO">
+        insert rank, title, rank_date into movie
+        values (#{rank},#{title},#{rankDate})
+    </insert>
+
+    <update id="updateMovie"
+            parameterType="com.example.web.music.MovieDTO">
+        update set title = #{title} from movie
+        where movie_seq like #{movieSeq}
+    </update>
+
+    <delete id="deleteMovie"
+            parameterType="com.example.web.music.MovieDTO">
+        delete from movie where movie_seq like #{movieSeq}
+    </delete>
+    <select id="selectMovies" resultType="com.example.web.music.MovieDTO"
+            parameterType="com.example.web.proxy.Pager">
+        select movie_seq movieSeq, rank, title, rank_date rankDate
+        from movie
+        <if test="searchWord != null">
+            where title like '%${searchWord}%'
+        </if>
+
+        limit #{rowStart}, #{pageSize}
+
+    </select>
+    <select id="selectMovie" resultType="com.example.web.music.MovieDTO"
+            parameterType="string">
+      select movie_seq movieSeq, rank, title, rank_date rankDate
+      from movie
+      where movie_seq = #{value}
+    </select>
+    <select id="count" resultType="int">
+      select count(*)
+      from movie
+    </select>
+</mapper>
